@@ -25,3 +25,28 @@ Do we see common feedback that could suggest concrete changes to the platform?
 
 ### 4.
 What are the top 3 platform changes to focus on?
+
+
+### 5.
+Who filed these? Give me a list of names and how many of them filed each.
+
+### 6.
+Filter out the background noise (tickets that are resolved, or consistent across versions), and compare to the interviews, what key findings does the combined information tell us?
+
+### 7.
+What should I be paying attention to / concerned about in the tickets?
+
+### 8.
+Are there tickets still unresolved with data to explain why?
+
+### 9.
+Only look at what came in after 12 August. What's different about these compared to everything before?
+
+### 10.
+You've now read both interviews and tickets. Where do they disagree? What's loud in the interviews but rare in the tickets, and what's all over the tickets that nobody brought up in the interviews?
+
+### 11.
+Review what we have now, and restructure the priority list so that items are arranged in descending order based on the impact resolution will have.
+
+### 12.
+Analyzing both interviews and tickets, now what are the priorities?
