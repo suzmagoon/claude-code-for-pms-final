@@ -50,3 +50,6 @@ Review what we have now, and restructure the priority list so that items are arr
 
 ### 12.
 Analyzing both interviews and tickets, now what are the priorities?
+
+### 13.
+If i'd only read the interviews, what would I have gotten wrong?
