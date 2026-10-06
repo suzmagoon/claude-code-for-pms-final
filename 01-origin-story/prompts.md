@@ -23,7 +23,10 @@ prompt library built from your own questions.
 ---
 
 ### 1.
+Yes, pull the missing pieces from rook-wiki and rook-database
 
 ### 2.
+Create a prioritized list of next steps
 
 ### 3.
+Draft the one-page brief for Helen
