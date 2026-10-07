@@ -42,3 +42,11 @@ What do Vesper, The Undertow, Farlight and Meteor Mite have in common that would
 ### 7.
 
 do we have data that Kip and Dot do not typically submit support tickets? regardless of this particular release
+
+### 8.
+
+provide a visual timeline of events for the undertow including any relevant data
+
+### 9.
+
+What's one sentence you can write about what happened to Farlight?
