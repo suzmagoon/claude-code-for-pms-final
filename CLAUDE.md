@@ -124,3 +124,6 @@ whether callouts went unanswered; Q4 plan; Security Policy 4.1 text.
 - Module 6 session: saved raw source material for later work: `00-rook/data/callout-history.csv` (160 rows = 16 responders × 10 weeks, 29 Jun–31 Aug, from the pings and responders tables; Farlight has 0 pings in the week of 31 Aug), the four September interviews as text in `00-rook/feedback/interviews/`, and the four product briefs in `06-sidekicks/briefs/`.
 - The Requisition Approval Chains brief says its ask is only a second sign-off over $2,000, then adds four more features (route-around after 48 h, cross-site dashboard, handler visibility, replacing Halloran's spreadsheet); scope and phasing are marked TBD, and its owner is "the Rook Supply team".
 - Responder-to-handler mapping is in the CSV: Kip handles both Meteor Mite and The Gale; every other responder has one handler.
+- Module 6 re-run (7 Oct 2026): rebuilding `callout-history.csv` straight from the pings and responders tables gave 160 rows identical to the saved file, so the export is reproducible.
+- The `handlers` table has 15 rows against 16 responders, because Kip looks after both Meteor Mite and The Gale.
+- Setup check passed on 7 Oct 2026: both the Rook wiki and database connectors answer. Nothing new learned about the 4.2 problem; still nothing confirmed with Helen or Wen Li.
