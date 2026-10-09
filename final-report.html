@@ -55,6 +55,11 @@
   .frame iframe{width:100%;height:640px;border:0;display:block}
   a{color:var(--blue)}
   .btn{display:inline-block;background:var(--blue);color:#0b1020;font-weight:700;padding:9px 16px;border-radius:10px;text-decoration:none;font-size:15px}
+  .gates{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+  .gate{flex:1 1 118px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute)}
+  .gate b{color:var(--ink);font-size:15px}.gate .gtop{font-size:20px;font-weight:800;color:var(--blue)}
+  .gate.q{border-top-color:var(--red);background:#2a1a24}.gate.q .gtop{color:var(--red)}
+  .gate.ok{border-top-color:var(--green);background:#14291f}.gate.ok .gtop{color:var(--green)}
   nav.dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:9}
   nav.dots a{width:11px;height:11px;border-radius:50%;background:#3a4668;display:block}
   nav.dots a.on{background:var(--amber);transform:scale(1.3)}
@@ -75,7 +80,7 @@
 <!-- 0 TITLE -->
 <section id="s0">
   <div class="eyebrow">Rook Dispatch · PM final report · 9 Oct 2026</div>
-  <h1>Release 4.2 didn't fail on average.<br><span class="amber">It failed for four people.</span></h1>
+  <h1>Release 4.2 taught us where to look.<br><span class="amber">Now we have a way back.</span></h1>
   <p class="lede">What happened, the evidence I found across six modules (with the exact prompt that produced each piece), the prototype that fixes it, and the skill that stops a half-formed brief from getting this far again.</p>
   <div class="stats">
     <div class="stat"><div class="big red">76.6<span class="arrow">→</span>64.0%</div><div class="lbl">acceptance, before vs after 4.2</div></div>
@@ -205,45 +210,61 @@
 <!-- Skill -->
 <section id="skill">
   <div class="eyebrow">Keeping it from happening again</div>
-  <h2><code style="font-size:.8em">/review-checklist</code>: six questions, every brief, every time</h2>
-  <p class="lede">4.2 shipped as a bundle of changes nobody wrote down as a problem, with an owner, a measure, and a scope. The skill makes that the entry ticket: a brief with any Fail doesn't go further.</p>
-  <div class="grid two">
-    <div class="card"><table>
-      <tr><th>#</th><th>Check</th><th>Fails if…</th></tr>
-      <tr><td>1</td><td>Owner</td><td>a role with no name, or "TBD"</td></tr>
-      <tr><td>2</td><td>Problem summary</td><td>features with no problem behind them</td></tr>
-      <tr><td>3</td><td>Who is affected</td><td>"users" alone</td></tr>
-      <tr><td>4</td><td>Success measure</td><td>no metric, or no way to read it</td></tr>
-      <tr><td>5</td><td>Scope consistency</td><td>start and end scope disagree (this is the "two changes at once" check)</td></tr>
-      <tr><td>6</td><td>Proposed fix</td><td>a problem with no fix, or one the evidence doesn't support</td></tr></table></div>
-    <div class="card"><b>Seen in practice</b>
+  <h2>A failsafe: nothing proceeds until it clears six gates</h2>
+  <p class="lede">On 14 Aug, Marcus asked whether the new weighting should apply to responders who'd been turning jobs down. Nobody owned the question, so nobody answered it. <b class="red">It has sat unanswered for 56 days</b> while four responders went silent. The checklist is the gate every brief must clear before it goes further.</p>
+  <div class="gates">
+    <div class="gate q"><div class="gtop">❓</div><b>Marcus's question</b><span>14 Aug, a wiki comment. No owner. No reply.</span></div>
+    <div class="gate"><div class="gtop">1</div><b>Owner</b><span>Who answers it? Must be a name, not "TBD".</span></div>
+    <div class="gate"><div class="gtop">2</div><b>Problem</b><span>What's wrong, and what's the evidence?</span></div>
+    <div class="gate"><div class="gtop">3</div><b>Who's hit</b><span>Responders, handlers, Supply: named.</span></div>
+    <div class="gate"><div class="gtop">4</div><b>Measure</b><span>Acceptance per responder, with a baseline.</span></div>
+    <div class="gate"><div class="gtop">5</div><b>Scope</b><span>Timeout <em>and</em> weighting changed together. Flagged.</span></div>
+    <div class="gate"><div class="gtop">6</div><b>Fix</b><span>A fix the evidence supports, or options.</span></div>
+    <div class="gate ok"><div class="gtop">✓</div><b>Cleared</b><span>Only now does it go to Helen or engineering.</span></div>
+  </div>
+  <div class="grid two" style="margin-top:22px">
+    <div class="card"><b>What it would have caught on 4.2</b>
+      <ul style="margin:.5em 0 0;padding-left:1.1em;color:var(--mute)">
+        <li><b class="amber">Gate 5:</b> two behaviour changes in one release, so a drop can't be blamed on either.</li>
+        <li><b class="amber">Gate 4:</b> a weekly aggregate that hid four responders at zero.</li>
+        <li><b class="amber">Gate 1:</b> an open risk with no named owner.</li></ul></div>
+    <div class="card"><b>Proof it works</b>
       <table style="margin-top:8px">
         <tr><th>Brief</th><th>Verdict</th></tr>
-        <tr><td>Requisition Approval Chains</td><td><span class="pill p-fail">Not ready</span></td></tr>
         <tr><td>My "way back in" brief</td><td><span class="pill p-part">Ready with small fixes</span></td></tr>
         <tr><td>Classmate's copy (Klarson-622)</td><td><span class="pill p-fail">Not ready</span></td></tr></table>
-      <p class="src">Verdict rule: any Fail = Not ready; Partials only = small fixes. It judges only what the brief says. Use: <code>/review-checklist &lt;path&gt;</code>. A Monday task to run it over all briefs was created, then disabled at my request.</p></div>
+      <p class="src">Any Fail = Not ready. Run it with <code>/review-checklist &lt;path&gt;</code>.</p></div>
   </div>
-  <p class="src">What it won't do: it can't spot a bad config change by itself. It catches the upstream failure, an unowned, unmeasured, quietly-growing brief, before engineering starts.</p>
+  <p class="src"><b>Honest gap:</b> the checklist reviews briefs, and Marcus's question was a comment, not a brief. A seventh check, "every open question has a named owner and a date", would close it. That's a proposal; it isn't in the skill yet.</p>
 </section>
 
-<!-- Next -->
 <section id="next">
-  <div class="eyebrow">Next</div>
-  <h2>What still isn't confirmed, and who closes it</h2>
-  <div class="grid two">
-    <div class="tl">
-      <div><b>Marcus + Wen Li</b><br>Per-responder ranking scores before/after 4.2; where the ranking log lives; whether scores survive a restart; the 2019 decay TODO; an "away" state.</div>
-      <div><b>Kip</b><br>Filed zero tickets in 10 weeks; a call is the best next step.</div>
-      <div><b>Helen</b><br>Q3 slips, the release slot (no 4.3 in the log), whether handler assignment and push enter the PRD.</div>
-      <div><b>Me</b><br>Run <code>/review-checklist</code> on <code>05-super-speed/brief.md</code> before anything goes to Helen.</div>
-    </div>
-    <div class="card"><b>Still unknown</b><ul style="margin:.5em 0 0;padding-left:1.1em;color:var(--mute)">
-      <li>Whether the 60 s wait or the weighting did more damage</li>
-      <li>Anything after 6 Sep (data ends there)</li>
-      <li>Prior-year August data, so "every August" is untestable</li>
-      <li>Why <em>these</em> four: nothing in the database distinguishes them</li></ul></div>
+  <div class="eyebrow">Wrap-up · what we found, concluded and propose</div>
+  <h2>Release 4.2 in one page</h2>
+  <div class="grid three">
+    <div class="card" style="border-top:4px solid var(--red)"><b class="red">What we found</b>
+      <ul style="margin:.5em 0 0;padding-left:1.1em">
+        <li>Acceptance <b>76.6% → 64.0%</b>; missed pings <b>2% → 18%</b>. Not seasonal. <span class="src">(M1, M3)</span></li>
+        <li>Four responders fell <b>37 → 0</b> takes a week; the work moved to the other twelve. <span class="src">(M3)</span></li>
+        <li>Tickets jumped from ~7 to <b>20–32</b> a week, 83 still open. Interviews alone pointed at the wrong problems. <span class="src">(M2)</span></li></ul></div>
+    <div class="card" style="border-top:4px solid var(--amber)"><b class="amber">What we concluded</b>
+      <ul style="margin:.5em 0 0;padding-left:1.1em">
+        <li>4.2 changed the wait <b>and</b> the weighting at once; the shorter wait is the likelier culprit, but untested. <span class="src">(M4)</span></li>
+        <li>A missed ping costs the same as a refusal, and the only way back is taking a callout. Quiet becomes permanent. <span class="src">(M4)</span></li>
+        <li>Marcus's 14 Aug question is answered by the code: the weights apply to everyone. <span class="src">(M4)</span></li></ul></div>
+    <div class="card" style="border-top:4px solid var(--green)"><b class="green">What we propose</b>
+      <ul style="margin:.5em 0 0;padding-left:1.1em">
+        <li>A <b>way back in</b>, in three stages: log and "gone quiet" state, softer miss penalty with decay, re-entry ping. <span class="src">(M5)</span></li>
+        <li>Test the 60 s wait and the weighting <b>separately</b>.</li>
+        <li>Gate every brief with <code>/review-checklist</code>. <span class="src">(M6)</span></li></ul></div>
   </div>
+  <div class="card" style="margin-top:20px"><b>Do next</b>
+    <div class="flow" style="margin-top:10px">
+      <div class="node"><b>Marcus + Wen Li</b><br><span class="src">scores, log storage, decay, "away"</span></div><div class="ar">→</div>
+      <div class="node"><b>Call Kip</b><br><span class="src">zero tickets in 10 weeks</span></div><div class="ar">→</div>
+      <div class="node"><b>Helen</b><br><span class="src">Q3 slips, release slot</span></div><div class="ar">→</div>
+      <div class="node good"><b>Review the brief</b><br><span class="src">then send it</span></div></div>
+    <p class="src" style="margin-bottom:0">Still unknown: timeout vs weighting, anything after 6 Sep, and why these four. Nothing here is confirmed with Wen Li, Marcus or Helen yet.</p></div>
 </section>
 
 <script>
