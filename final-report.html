@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Release 4.2: what happened, the fix, and how we stop it recurring</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{--bg:#0f1524;--bg2:#161e33;--card:#1d2742;--ink:#eef1f8;--mute:#9aa6c4;--line:#2c3858;
+        --amber:#f5b942;--red:#ff6b6b;--green:#4ade80;--blue:#6ea8ff;--violet:#b79cff;}
+  *{box-sizing:border-box}
+  html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 -apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+  section{min-height:100vh;scroll-snap-align:start;padding:72px 7vw 64px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+  section:nth-of-type(even){background:var(--bg2)}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:8px}
+  h1{font-size:clamp(38px,6vw,76px);line-height:1.04;margin:0 0 18px;letter-spacing:-.02em}
+  h2{font-size:clamp(28px,3.6vw,44px);line-height:1.1;margin:0 0 10px;letter-spacing:-.01em}
+  .lede{font-size:clamp(18px,1.8vw,23px);color:var(--mute);max-width:46em;margin:0 0 26px}
+  .grid{display:grid;gap:22px}
+  .two{grid-template-columns:1.15fr 1fr}.three{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:900px){.two,.three{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .big{font-size:clamp(44px,6vw,80px);font-weight:800;line-height:1;letter-spacing:-.03em}
+  .red{color:var(--red)}.green{color:var(--green)}.amber{color:var(--amber)}.blue{color:var(--blue)}.violet{color:var(--violet)}
+  .lbl{color:var(--mute);font-size:14px;margin-top:6px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin:8px 0 24px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .stat .big{font-size:clamp(34px,4vw,52px)}
+  .big.nw{white-space:nowrap;font-size:clamp(26px,3vw,44px)}
+  .arrow{color:var(--mute);font-weight:400;font-size:.6em;padding:0 .15em}
+  /* prompt + finding */
+  .pf{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+  @media(max-width:900px){.pf{grid-template-columns:1fr}}
+  .prompt{background:#0b1020;border:1px solid var(--line);border-left:4px solid var(--violet);border-radius:12px;padding:18px 20px;font:15px/1.5 ui-monospace,Menlo,Consolas,monospace;color:#d9ddff;white-space:pre-wrap}
+  .prompt small{display:block;font:700 11px/1 -apple-system,Helvetica,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--violet);margin-bottom:10px}
+  .finding{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:18px 20px}
+  .finding small{display:block;font:700 11px/1 -apple-system,Helvetica,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+  .finding p{margin:.3em 0}
+  .src{font-size:13px;color:var(--mute);margin-top:10px}
+  code{font:14px ui-monospace,Menlo,monospace;background:#0b1020;padding:1px 6px;border-radius:5px}
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+  .p-pass{background:#12351f;color:var(--green)}.p-part{background:#3d2f0e;color:var(--amber)}.p-fail{background:#401a1a;color:var(--red)}
+  table{border-collapse:collapse;width:100%;font-size:15px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mute);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  svg text{font-family:-apple-system,Helvetica,Arial,sans-serif}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--mute);margin-top:8px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  /* flow */
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:15px}
+  .node.bad{border-color:var(--red);background:#2a1a24}.node.good{border-color:var(--green);background:#14291f}
+  .flow .ar{color:var(--mute);font-size:22px}
+  .frame{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+  .frame iframe{width:100%;height:640px;border:0;display:block}
+  a{color:var(--blue)}
+  .btn{display:inline-block;background:var(--blue);color:#0b1020;font-weight:700;padding:9px 16px;border-radius:10px;text-decoration:none;font-size:15px}
+  nav.dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:9}
+  nav.dots a{width:11px;height:11px;border-radius:50%;background:#3a4668;display:block}
+  nav.dots a.on{background:var(--amber);transform:scale(1.3)}
+  @media(max-width:700px){nav.dots{display:none}}
+  .hint{position:fixed;left:18px;bottom:14px;font-size:12px;color:var(--mute);z-index:9}
+  .tl{position:relative;margin:10px 0 0;padding-left:26px;border-left:3px solid var(--line)}
+  .tl div{margin:0 0 14px;position:relative}.tl div:before{content:"";position:absolute;left:-34px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--amber);border:3px solid var(--bg2)}
+  .tl b{color:var(--amber)}
+  .mod{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .mod .num{width:46px;height:46px;border-radius:12px;background:var(--amber);color:#1a1300;font-weight:800;font-size:22px;display:grid;place-items:center;flex:none}
+  .mod h2{margin:0;font-size:clamp(24px,3vw,36px)}
+</style>
+</head>
+<body>
+<nav class="dots" id="dots"></nav>
+<div class="hint">↑ ↓ or space to move through the slides</div>
+
+<!-- 0 TITLE -->
+<section id="s0">
+  <div class="eyebrow">Rook Dispatch · PM final report · 9 Oct 2026</div>
+  <h1>Release 4.2 didn't fail on average.<br><span class="amber">It failed for four people.</span></h1>
+  <p class="lede">What happened, the evidence I found across six modules (with the exact prompt that produced each piece), the prototype that fixes it, and the skill that stops a half-formed brief from getting this far again.</p>
+  <div class="stats">
+    <div class="stat"><div class="big red">76.6<span class="arrow">→</span>64.0%</div><div class="lbl">acceptance, before vs after 4.2</div></div>
+    <div class="stat"><div class="big red">2<span class="arrow">→</span>18%</div><div class="lbl">pings missed, before vs after</div></div>
+    <div class="stat"><div class="big red">37<span class="arrow">→</span>0</div><div class="lbl">weekly takes for four responders (to week of 31 Aug)</div></div>
+  </div>
+  <p class="src">Sources: course CLAUDE.md, the six <code>prompts.md</code> files, Rook database and wiki (data ends 6 Sep 2026). Rook Industries is a fictional teaching scenario.</p>
+</section>
+
+<!-- 1 WHAT HAPPENED -->
+<section id="s1">
+  <div class="eyebrow">What happened</div>
+  <h2>4.2 changed two things at once, and one rule made the damage permanent</h2>
+  <p class="lede">On 12 Aug, 4.2 cut the ping wait from 90 s to 60 s <em>and</em> shifted ranking weight toward proximity. Missing a ping scores the same as refusing one, and the only way back up the list is taking a callout. A responder who goes quiet stops being asked, so they can't recover.</p>
+  <div class="flow">
+    <div class="node">Wait cut 90 → 60 s</div><div class="ar">→</div>
+    <div class="node bad">More pings missed (~2% → ~18%)</div><div class="ar">→</div>
+    <div class="node bad">Miss = refusal: score −0.12</div><div class="ar">→</div>
+    <div class="node bad">Rank drops, asked less</div><div class="ar">→</div>
+    <div class="node bad">Can't take a callout to climb back</div>
+  </div>
+  <div class="grid three" style="margin-top:26px">
+    <div class="card"><div class="big nw amber">0.45→0.60</div><div class="lbl">proximity weight (recent acceptance 0.40 → 0.25)</div></div>
+    <div class="card"><div class="big nw amber">+0.08 / −0.12</div><div class="lbl">score for a take vs a turn-down <em>or</em> a miss. About seven takes to climb back from 0 to 0.5.</div></div>
+    <div class="card"><div class="big nw amber">83</div><div class="lbl">of 107 post-4.2 support tickets still open</div></div>
+  </div>
+  <p class="src">Honest limits: the timeout and the weighting were never tested separately, and the shorter wait is the likelier culprit, not a proven one. The code-level gaps are my inference until Wen Li confirms. "Mostly seasonal" (Priya's hypothesis) isn't supported: callouts fell ~21%, but acceptance stepped down exactly at 4.2.</p>
+</section>
+
+<!-- 2 CHART -->
+<section id="s2">
+  <div class="eyebrow">The picture the weekly average hid</div>
+  <h2>Takes per week: four responders vs everyone else</h2>
+  <p class="lede">From <code>00-rook/data/callout-history.csv</code> (16 responders × 10 weeks). The other twelve absorbed the work. The four (Vesper, The Undertow, Farlight, Meteor Mite) did not come back.</p>
+  <div class="card"><svg id="chart" viewBox="0 0 900 340" width="100%" role="img" aria-label="Line chart of weekly pings taken, four starved responders versus the other twelve"></svg>
+    <div class="legend"><span><i style="background:var(--red)"></i>Four starved responders (pings taken)</span><span><i style="background:var(--blue)"></i>Other twelve (pings taken)</span><span><i style="background:var(--amber)"></i>4.2 ships, 12 Aug</span></div></div>
+  <div class="stats" style="margin-top:20px">
+    <div class="stat"><div class="big red">−86%</div><div class="lbl">takes for the four (37 → 5 a week, before vs after)</div></div>
+    <div class="stat"><div class="big blue">+7</div><div class="lbl">takes a week gained by the other twelve</div></div>
+    <div class="stat"><div class="big amber">¼</div><div class="lbl">of the acceptance drop explained by the four; the rest hit everyone (77.2% → 68.5% without them)</div></div>
+  </div>
+</section>
+
+<!-- Module slides -->
+<section id="m1">
+  <div class="mod"><div class="num">1</div><div><div class="eyebrow" style="margin:0">Module 1 · Origin Story</div><h2>Turn a messy handoff into a ranked plan</h2></div></div>
+  <div class="pf">
+    <div class="prompt"><small>My prompt (01-origin-story/prompts.md, #2)</small>Create a prioritized list of next steps</div>
+    <div class="finding"><small>Finding / artifact</small>
+      <p><b>Five next steps, in order:</b></p>
+      <p>1. Separate the 60 s timeout from the weighting change<br>2. Talk to Helen about the Q3 slips<br>3. Triage the tickets with Nadia<br>4. Per-responder metrics (Ravi)<br>5. Write the "how routing priority works" doc with Wen Li</p>
+      <p>Grounded in the database: acceptance <b class="red">76.6% → 64.0%</b>, missed pings <b class="red">2.3% → 18.0%</b>. Not "mostly seasonal."</p>
+      <div class="src">Fed the draft brief for Helen (prompt #3), <code>00-rook/brief-for-helen-4.2.md</code>. Its "starved because far from hotspots" line was later disproven (Module 2). Meteor Mite's area is the busiest.</div></div>
+  </div>
+</section>
+
+<section id="m2">
+  <div class="mod"><div class="num">2</div><div><div class="eyebrow" style="margin:0">Module 2 · Super Hearing</div><h2>Interviews said "console". Tickets said "routing".</h2></div></div>
+  <div class="pf">
+    <div class="prompt"><small>My prompt (02-super-hearing/prompts.md, #9)</small>Only look at what came in after 12 August. What's different about these compared to everything before?</div>
+    <div class="finding"><small>Finding / artifact</small>
+      <p>Tickets jumped from <b>~6–8 a week</b> to <b class="red">20, 27, 32, 25</b>. 45 new-theme tickets, all open: <b>15</b> "ping moved on before they could answer", <b>30</b> "phone hasn't gone off in days".</p>
+      <p>Interviews alone would have pointed at dark mode, text size and alert sounds.</p>
+      <div class="src">Companion prompt #13: "If i'd only read the interviews, what would I have gotten wrong?"</div></div>
+  </div>
+  <div class="card" style="margin-top:20px"><svg id="tix" viewBox="0 0 900 190" width="100%" role="img" aria-label="Bar chart of weekly support tickets"></svg></div>
+</section>
+
+<section id="m3">
+  <div class="mod"><div class="num">3</div><div><div class="eyebrow" style="margin:0">Module 3 · Rewind</div><h2>Take the four out and look again</h2></div></div>
+  <div class="pf">
+    <div class="prompt"><small>My prompt (03-rewind/prompts.md, #1)</small>Show me the same weekly numbers excluding the four starved responders</div>
+    <div class="finding"><small>Finding / artifact</small>
+      <p>Acceptance <b>76.8% → 64.7%</b> overall; <b>77.2% → 68.5%</b> without the four. They explain about a quarter of the drop. The other twelve were hit too (missed ~1% → 11–15%).</p>
+      <p>Farlight, week by week: pings <b class="red">12 → 10 → 3 → 1 → 0</b> while Uptown callouts held at 8 → 10. The work came back; the pings didn't.</p>
+      <div class="src">Companion prompt #9: "What's one sentence you can write about what happened to Farlight?"</div></div>
+  </div>
+</section>
+
+<section id="m4">
+  <div class="mod"><div class="num">4</div><div><div class="eyebrow" style="margin:0">Module 4 · X-Ray Vision</div><h2>Read the code. Find the rule that traps people.</h2></div></div>
+  <div class="pf">
+    <div class="prompt"><small>My prompt (04-x-ray-vision/prompts.md, #1)</small>With what we know about the problems Farlight and others have seen/reported both predating and following the 4.2 release, inspect for gaps in the code and in chat describe what those gaps are, and what the impact of its absence is</div>
+    <div class="finding"><small>Finding / artifact</small>
+      <p>One set of weights applies to everyone, so it applied to decliners by structure; Marcus's unanswered 14 Aug question is answered by the code.</p>
+      <p>Gaps: a miss is scored like a refusal; no route back up except taking a callout; the list stops at the first yes; an unresolved 2019 score-decay TODO; no check the push reached the phone; scores kept in memory only; nobody alerted when no one takes a callout.</p>
+      <div class="src">Led to: message to Wen Li (#4) and reply to Marcus (#5). Drafted, not sent.</div></div>
+  </div>
+</section>
+
+<section id="m5">
+  <div class="mod"><div class="num">5</div><div><div class="eyebrow" style="margin:0">Module 5 · Super Speed</div><h2>Build the fix nobody had</h2></div></div>
+  <div class="pf">
+    <div class="prompt"><small>My prompt (05-super-speed/prompts.md, #16)</small>I want the console to cleanly show my responders ranking at the top, and then the two responders as cards within which I can see their status (Active, Gone quiet, Recovering, and Away), if they've gone quiet, why, and a way to open a modal to manage their pings. The modal to manage their pings should give me a way to assign pings to them, and notify them, or set them to 'away' if they're unavailable for some reason.</div>
+    <div class="finding"><small>Finding / artifact</small>
+      <p><b>A "way back in" for quiet responders:</b> log the ranking and derive a "gone quiet" state first (no routing change); then a smaller penalty for missed pings plus decay toward 0.5; then a re-entry ping for a quiet, fully capable responder near the top.</p>
+      <p>Shipped as separate stages, because 4.2 changed two things at once.</p>
+      <div class="src">Artifacts: <code>brief.md</code>, <code>prd-way-back-in.md</code>, <code>spec-way-back-in-engineering.md</code>, <code>prototype.html</code>. Proposed values are my guesses.</div></div>
+  </div>
+</section>
+
+<section id="m6">
+  <div class="mod"><div class="num">6</div><div><div class="eyebrow" style="margin:0">Module 6 · Sidekicks</div><h2>Run my own brief through the checklist</h2></div></div>
+  <div class="pf">
+    <div class="prompt"><small>My prompt (06-sidekicks/prompts.md, #6)</small>/review-checklist/https://github.com/suzmagoon/claude-code-for-pms-final/blob/main/05-super-speed/brief.md</div>
+    <div class="finding"><small>Finding / artifact</small>
+      <p>Reviewing <code>05-super-speed/brief.md</code> ("a way back in for quiet responders"): <span class="pill p-part">Ready with small fixes</span>. No Fails, so it can go further once these are closed:</p>
+      <p><b class="amber">Owner:</b> only a role ("Rook Dispatch PM"), no name.<br><b class="amber">Success measure:</b> targets are unquantified ("at least a few times a week").<br><b class="amber">Proposed fix:</b> one design, no options with trade-offs.</p>
+      <div class="src">It passes on problem, who's affected and scope: the "what it deliberately doesn't do" list matches what the brief changes. Skill file: <code>.claude/skills/review-checklist/SKILL.md</code>.</div></div>
+  </div>
+</section>
+
+<!-- Fix / prototype -->
+<section id="fix">
+  <div class="eyebrow">The fix, shown</div>
+  <h2>A console where "gone quiet" is visible, and there's a way back in</h2>
+  <p class="lede">Ranking on top, a card per responder with status (Active, Gone quiet, Recovering, Away), the reason, and a Manage pings modal to assign a ping, notify, or set away. Click around: it's the real prototype. All numbers in it are made up.</p>
+  <div class="frame"><iframe src="05-super-speed/prototype.html" title="Rook Dispatch prototype" loading="lazy"></iframe></div>
+  <p class="src"><a class="btn" href="05-super-speed/prototype.html">Open the prototype full-screen</a> &nbsp; Open design questions: an "away" state doesn't exist in routing code (and Supply reads availability); assigned pings overlap the Routing Override Audit Log brief; "missed" pushes need a delivery signal that <code>push_to_device</code> doesn't give.</p>
+  <div class="grid three" style="margin-top:14px">
+    <div class="card"><b class="green">Stage 1</b><p style="margin:.3em 0">Ranking log + derived "gone quiet" state. No routing change. We finally see it.</p></div>
+    <div class="card"><b class="amber">Stage 2</b><p style="margin:.3em 0">Smaller miss penalty, decay toward 0.5. Reverses Wen Li's 2019 stance, so needs her and Helen.</p></div>
+    <div class="card"><b class="blue">Stage 3</b><p style="margin:.3em 0">Re-entry ping: promote a quiet, capable responder within a score margin of the top.</p></div>
+  </div>
+</section>
+
+<!-- Skill -->
+<section id="skill">
+  <div class="eyebrow">Keeping it from happening again</div>
+  <h2><code style="font-size:.8em">/review-checklist</code>: six questions, every brief, every time</h2>
+  <p class="lede">4.2 shipped as a bundle of changes nobody wrote down as a problem, with an owner, a measure, and a scope. The skill makes that the entry ticket: a brief with any Fail doesn't go further.</p>
+  <div class="grid two">
+    <div class="card"><table>
+      <tr><th>#</th><th>Check</th><th>Fails if…</th></tr>
+      <tr><td>1</td><td>Owner</td><td>a role with no name, or "TBD"</td></tr>
+      <tr><td>2</td><td>Problem summary</td><td>features with no problem behind them</td></tr>
+      <tr><td>3</td><td>Who is affected</td><td>"users" alone</td></tr>
+      <tr><td>4</td><td>Success measure</td><td>no metric, or no way to read it</td></tr>
+      <tr><td>5</td><td>Scope consistency</td><td>start and end scope disagree (this is the "two changes at once" check)</td></tr>
+      <tr><td>6</td><td>Proposed fix</td><td>a problem with no fix, or one the evidence doesn't support</td></tr></table></div>
+    <div class="card"><b>Seen in practice</b>
+      <table style="margin-top:8px">
+        <tr><th>Brief</th><th>Verdict</th></tr>
+        <tr><td>Requisition Approval Chains</td><td><span class="pill p-fail">Not ready</span></td></tr>
+        <tr><td>My "way back in" brief</td><td><span class="pill p-part">Ready with small fixes</span></td></tr>
+        <tr><td>Classmate's copy (Klarson-622)</td><td><span class="pill p-fail">Not ready</span></td></tr></table>
+      <p class="src">Verdict rule: any Fail = Not ready; Partials only = small fixes. It judges only what the brief says. Use: <code>/review-checklist &lt;path&gt;</code>. A Monday task to run it over all briefs was created, then disabled at my request.</p></div>
+  </div>
+  <p class="src">What it won't do: it can't spot a bad config change by itself. It catches the upstream failure, an unowned, unmeasured, quietly-growing brief, before engineering starts.</p>
+</section>
+
+<!-- Next -->
+<section id="next">
+  <div class="eyebrow">Next</div>
+  <h2>What still isn't confirmed, and who closes it</h2>
+  <div class="grid two">
+    <div class="tl">
+      <div><b>Marcus + Wen Li</b><br>Per-responder ranking scores before/after 4.2; where the ranking log lives; whether scores survive a restart; the 2019 decay TODO; an "away" state.</div>
+      <div><b>Kip</b><br>Filed zero tickets in 10 weeks; a call is the best next step.</div>
+      <div><b>Helen</b><br>Q3 slips, the release slot (no 4.3 in the log), whether handler assignment and push enter the PRD.</div>
+      <div><b>Me</b><br>Run <code>/review-checklist</code> on <code>05-super-speed/brief.md</code> before anything goes to Helen.</div>
+    </div>
+    <div class="card"><b>Still unknown</b><ul style="margin:.5em 0 0;padding-left:1.1em;color:var(--mute)">
+      <li>Whether the 60 s wait or the weighting did more damage</li>
+      <li>Anything after 6 Sep (data ends there)</li>
+      <li>Prior-year August data, so "every August" is untestable</li>
+      <li>Why <em>these</em> four: nothing in the database distinguishes them</li></ul></div>
+  </div>
+</section>
+
+<script>
+// ---- charts from callout-history.csv (pings_taken by week) ----
+const weeks=["29 Jun","6 Jul","13 Jul","20 Jul","27 Jul","3 Aug","10 Aug","17 Aug","24 Aug","31 Aug"];
+const four=[36,37,36,37,40,37,18,3,0,0], rest=[96,94,97,95,92,97,78,101,108,120];
+(function(){
+  const s=document.getElementById('chart'),W=900,H=340,L=46,R=20,T=20,B=44,max=130;
+  const x=i=>L+i*(W-L-R)/9,y=v=>T+(1-v/max)*(H-T-B);
+  let h='';
+  for(let v=0;v<=120;v+=40){h+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#2c3858"/><text x="${L-8}" y="${y(v)+4}" fill="#9aa6c4" font-size="12" text-anchor="end">${v}</text>`}
+  weeks.forEach((w,i)=>h+=`<text x="${x(i)}" y="${H-18}" fill="#9aa6c4" font-size="12" text-anchor="middle">${w}</text>`);
+  const rel=x(6)-(x(6)-x(5))*0.45;
+  h+=`<line x1="${rel}" x2="${rel}" y1="${T}" y2="${H-B}" stroke="#f5b942" stroke-dasharray="5 4" stroke-width="2"/><text x="${rel-6}" y="${T+12}" fill="#f5b942" font-size="13" text-anchor="end" font-weight="700">4.2 ships</text>`;
+  const line=(d,c)=>{h+=`<polyline fill="none" stroke="${c}" stroke-width="3.5" stroke-linejoin="round" points="${d.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`+d.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${c}"><title>${weeks[i]}: ${v} taken</title></circle>`).join('')};
+  line(rest,'#6ea8ff');line(four,'#ff6b6b');
+  h+=`<text x="${x(9)}" y="${y(0)-10}" fill="#ff6b6b" font-size="14" text-anchor="end" font-weight="700">0 takes</text><text x="${x(9)}" y="${y(120)-12}" fill="#6ea8ff" font-size="14" text-anchor="end" font-weight="700">120</text>`;
+  s.innerHTML=h;
+})();
+(function(){
+  const s=document.getElementById('tix'),data=[["Before 12 Aug (avg)",7],["10 Aug",20],["17 Aug",27],["24 Aug",32],["31 Aug",25]];
+  let h='';data.forEach((d,i)=>{const y=14+i*34,w=d[1]*22;h+=`<text x="150" y="${y+16}" fill="#9aa6c4" font-size="13" text-anchor="end">${d[0]}</text><rect x="160" y="${y}" width="${w}" height="24" rx="5" fill="${i?'#ff6b6b':'#6ea8ff'}"/><text x="${166+w}" y="${y+17}" fill="#eef1f8" font-size="14" font-weight="700">${d[1]}${i==0?' (6–8)':''}</text>`});
+  s.innerHTML=h;
+})();
+// ---- slide dots + keyboard ----
+const secs=[...document.querySelectorAll('section')],dots=document.getElementById('dots');
+secs.forEach(sec=>{const a=document.createElement('a');a.href='#'+sec.id;a.title=sec.id;dots.appendChild(a)});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){[...dots.children].forEach((d,i)=>d.classList.toggle('on',secs[i]===e.target))}}),{threshold:.5});
+secs.forEach(s=>io.observe(s));
+addEventListener('keydown',e=>{
+  if(e.target.tagName==='IFRAME')return;
+  const cur=secs.findIndex(s=>{const r=s.getBoundingClientRect();return r.top>-innerHeight/2&&r.top<innerHeight/2});
+  if(['ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();secs[Math.min(cur+1,secs.length-1)].scrollIntoView()}
+  if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();secs[Math.max(cur-1,0)].scrollIntoView()}
+});
+</script>
+</body>
+</html>
