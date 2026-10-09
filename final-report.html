@@ -60,6 +60,49 @@
   .gate b{color:var(--ink);font-size:15px}.gate .gtop{font-size:20px;font-weight:800;color:var(--blue)}
   .gate.q{border-top-color:var(--red);background:#2a1a24}.gate.q .gtop{color:var(--red)}
   .gate.ok{border-top-color:var(--green);background:#14291f}.gate.ok .gtop{color:var(--green)}
+  .vis{margin-top:20px}.vis h3{margin:0 0 12px;font-size:15px;color:var(--mute);font-weight:600}
+  .brow{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center;margin:6px 0;font-size:14px}
+  .btrack{display:flex;align-items:center;gap:8px}.btrack i{display:block;height:22px;border-radius:5px}.btrack b{font-size:14px}
+  .wt{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin:8px 0;font-size:14px}
+  .stack{display:flex;height:34px;border-radius:8px;overflow:hidden;font-size:12px;font-weight:700;color:#0b1020}
+  .stack span{display:grid;place-items:center;white-space:nowrap}
+  .states{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .st{padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;text-align:center}.st small{display:block;font-weight:400;font-size:12px;opacity:.85}
+  .tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}@media(max-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
+  .tile{border-radius:12px;padding:12px;text-align:center;font-size:13px;border:1px solid var(--line);background:var(--card)}.tile b{display:block;font-size:15px;margin-bottom:4px}
+  .tile.p{border-top:4px solid var(--green)}.tile.h{border-top:4px solid var(--amber)}
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:10px;text-align:center}
+  .ba .big{font-size:clamp(30px,3.4vw,46px)}
+  .ba .ar2{color:var(--mute);font-size:clamp(22px,2.4vw,32px);line-height:1;align-self:center}
+  .ba .tag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:6px}
+  .ctitle{font-size:14px;font-weight:700;text-align:center;margin-bottom:10px}
+  .ba2{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:10px;text-align:center}
+  .ba2 .big{font-size:clamp(30px,3.4vw,46px)}
+  .ba2 .ar2{color:var(--mute);font-size:clamp(22px,2.4vw,32px);line-height:1}
+  .ba2 .tag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:6px;align-self:start}
+  .ba2 .ship{font-size:11px;color:var(--mute);line-height:1.25;margin-top:4px;align-self:start;white-space:nowrap}
+  .spark{display:block;margin-top:10px}
+  .node .ic{font-size:20px;margin-right:8px;vertical-align:-4px;color:#9fb0d8}
+  .node .ic.risk{color:var(--red)}
+  .node .ic svg{display:inline-block}
+  .mc{background:linear-gradient(160deg,var(--card),#141b30);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:18px;padding:20px 22px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .mh{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
+  .mi{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#0b1020;font-size:19px;letter-spacing:0;color:#9fb0d8}
+  .mv{display:flex;align-items:baseline;gap:10px;font-size:clamp(34px,3.6vw,48px);font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+  .mv i{font-style:normal;color:var(--mute);font-weight:400;font-size:.55em}
+  .mv .up{color:var(--blue)}.mv .gr{color:var(--green)}.mv .rd{color:var(--red)}
+  .mbar{height:8px;background:#0b1020;border-radius:6px;margin-top:10px;overflow:hidden}.mbar div{height:100%;background:#4a5a85;border-radius:6px}.mbar.hot div{background:var(--blue)}
+  .split{display:flex;height:26px;border-radius:8px;overflow:hidden;margin-top:12px;font-size:11px;font-weight:700;color:#0b1020}
+  .split div{display:grid;place-items:center;white-space:nowrap}.split .g{background:var(--green)}.split .r{background:var(--red)}
+  .ringrow{display:flex;align-items:center;gap:16px}
+  .ml{font-size:14px;color:var(--mute);margin-top:12px;line-height:1.4}
+  .mt{font-size:19px;font-weight:700;line-height:1.3;margin:0 0 14px;color:var(--ink)}
+  .mtab{width:100%;border-collapse:collapse;font-size:14px;margin-top:2px}
+  .mtab th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);padding:4px 6px;text-align:left}
+  .mtab td{padding:9px 6px;border-top:1px solid var(--line);white-space:nowrap}
+  .mtab td:first-child{white-space:normal;color:var(--mute)}
+  .mtab b{font-size:20px}.mtab .ar3{color:var(--mute);padding:9px 0}
+  .dl{font-weight:700;text-align:right}.dl.hi{color:var(--blue)}.dl.lo{color:var(--amber)}.dl.up{color:var(--green)}.dl.dn{color:var(--red)}
   nav.dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:9}
   nav.dots a{width:11px;height:11px;border-radius:50%;background:#3a4668;display:block}
   nav.dots a.on{background:var(--amber);transform:scale(1.3)}
@@ -83,29 +126,52 @@
   <h1>Release 4.2 taught us where to look.<br><span class="amber">Now we have a way back.</span></h1>
   <p class="lede">What happened, the evidence I found across six modules (with the exact prompt that produced each piece), the prototype that fixes it, and the skill that stops a half-formed brief from getting this far again.</p>
   <div class="stats">
-    <div class="stat"><div class="big red">76.6<span class="arrow">→</span>64.0%</div><div class="lbl">acceptance, before vs after 4.2</div></div>
-    <div class="stat"><div class="big red">2<span class="arrow">→</span>18%</div><div class="lbl">pings missed, before vs after</div></div>
-    <div class="stat"><div class="big red">37<span class="arrow">→</span>0</div><div class="lbl">weekly takes for four responders (to week of 31 Aug)</div></div>
-  </div>
+    <div class="stat"><div class="ctitle">Pings taken (acceptance)</div><div class="ba2">
+<div class="big blue">76.6%</div><div class="ar2">→</div><div class="big red">64.0%</div>
+<div class="tag">Before</div><div class="ship">4.2 ships<br>12 Aug</div><div class="tag">After</div></div><svg class="spark" data-s="acc" viewBox="0 0 260 70" width="100%" role="img"></svg></div>
+<div class="stat"><div class="ctitle">Pings missed</div><div class="ba2">
+<div class="big blue">2%</div><div class="ar2">→</div><div class="big red">18%</div>
+<div class="tag">Before</div><div class="ship">4.2 ships<br>12 Aug</div><div class="tag">After</div></div><svg class="spark" data-s="miss" viewBox="0 0 260 70" width="100%" role="img"></svg></div>
+<div class="stat"><div class="ctitle">Weekly takes, the four</div><div class="ba2">
+<div class="big blue">37</div><div class="ar2">→</div><div class="big red">0</div>
+<div class="tag">Before</div><div class="ship">4.2 ships<br>12 Aug</div><div class="tag">After</div></div><svg class="spark" data-s="take" viewBox="0 0 260 70" width="100%" role="img"></svg></div>
+</div>
   <p class="src">Sources: course CLAUDE.md, the six <code>prompts.md</code> files, Rook database and wiki (data ends 6 Sep 2026). Rook Industries is a fictional teaching scenario.</p>
 </section>
 
 <!-- 1 WHAT HAPPENED -->
 <section id="s1">
   <div class="eyebrow">What happened</div>
-  <h2>4.2 changed two things at once, and one rule made the damage permanent</h2>
-  <p class="lede">On 12 Aug, 4.2 cut the ping wait from 90 s to 60 s <em>and</em> shifted ranking weight toward proximity. Missing a ping scores the same as refusing one, and the only way back up the list is taking a callout. A responder who goes quiet stops being asked, so they can't recover.</p>
+  <h2>How a faster timeout and one scoring rule shut four responders out.</h2>
+  <p class="lede">On 12 Aug, 4.2 cut the ping wait from 90 s to 60s <em>and</em> shifted ranking weight toward proximity. Missing a ping scores the same as refusing one, and the only way back up the list is taking a callout. A responder who goes quiet stops being asked, so they can't recover.</p>
   <div class="flow">
-    <div class="node">Wait cut 90 → 60 s</div><div class="ar">→</div>
-    <div class="node bad">More pings missed (~2% → ~18%)</div><div class="ar">→</div>
-    <div class="node bad">Miss = refusal: score −0.12</div><div class="ar">→</div>
-    <div class="node bad">Rank drops, asked less</div><div class="ar">→</div>
-    <div class="node bad">Can't take a callout to climb back</div>
+    <div class="node"><span class="ic"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 2M9.5 2.5h5M12 2.5v3"/></svg></span>Wait cut 90 → 60s</div><div class="ar">→</div>
+    <div class="node"><span class="ic risk"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2M3 3l18 18"/></svg></span>More pings missed (~2% → ~18%)</div><div class="ar">→</div>
+    <div class="node"><span class="ic risk"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5V20h16.5M8.5 16v-4.5M12.5 16V8M16.5 16v-6.5"/></svg></span>Miss = refusal: score −0.12</div><div class="ar">→</div>
+    <div class="node"><span class="ic risk"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l6 6 4-4 8 9M21 16v-5M21 16h-5"/></svg></span>Rank drops, asked less</div><div class="ar">→</div>
+    <div class="node"><span class="ic risk"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/></svg></span>Can't take a callout to climb back</div>
   </div>
   <div class="grid three" style="margin-top:26px">
-    <div class="card"><div class="big nw amber">0.45→0.60</div><div class="lbl">proximity weight (recent acceptance 0.40 → 0.25)</div></div>
-    <div class="card"><div class="big nw amber">+0.08 / −0.12</div><div class="lbl">score for a take vs a turn-down <em>or</em> a miss. About seven takes to climb back from 0 to 0.5.</div></div>
-    <div class="card"><div class="big nw amber">83</div><div class="lbl">of 107 post-4.2 support tickets still open</div></div>
+    <div class="mc" style="--c:var(--blue)"><div class="mh"><span class="mi"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg></span>Proximity weight</div>
+      <div class="mt">4.2 made "close" count for more, and a good record for less.</div>
+      <table class="mtab"><tr><th></th><th>Before</th><th></th><th>After</th><th></th></tr>
+        <tr><td>Closeness (proximity)</td><td>0.45</td><td class="ar3">→</td><td><b>0.60</b></td><td class="dl hi">▲ +0.15</td></tr>
+        <tr><td>Good record (recent acceptance)</td><td>0.40</td><td class="ar3">→</td><td><b>0.25</b></td><td class="dl lo">▼ −0.15</td></tr></table>
+      <div class="ml">These are the weights in the ranking score. Weight moved from track record to closeness.</div></div>
+    <div class="mc" style="--c:var(--blue)"><div class="mh"><span class="mi"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5V20h16.5M8.5 16v-4.5M12.5 16V8M16.5 16v-6.5"/></svg></span>Score per ping</div>
+      <div class="mt">Missing a ping hurts your rank more than taking one helps it.</div>
+      <table class="mtab"><tr><th>What happens</th><th></th><th></th><th>Score change</th><th></th></tr>
+        <tr><td>Take it</td><td></td><td></td><td></td><td class="dl up">▲ +0.08</td></tr>
+        <tr><td>Turn it down</td><td></td><td></td><td></td><td class="dl dn">▼ −0.12</td></tr>
+        <tr><td>Miss it</td><td></td><td></td><td></td><td class="dl dn">▼ −0.12</td></tr></table>
+      <div class="ml">A miss is scored like a refusal. A responder at 0 needs about seven takes to climb back to 0.5.</div></div>
+    <div class="mc" style="--c:var(--amber)"><div class="mh"><span class="mi"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8zM14 6v2M14 11v2M14 16v2"/></svg></span>Tickets still open</div>
+      <div class="mt">Handlers are still waiting: 83 of 107 tickets are unanswered.</div>
+      <div class="ringrow"><svg viewBox="0 0 80 80" width="84" height="84"><circle cx="40" cy="40" r="32" fill="none" stroke="#2c3858" stroke-width="9"/><circle cx="40" cy="40" r="32" fill="none" stroke="#f5b942" stroke-width="9" stroke-linecap="round" stroke-dasharray="156.3 201.1" transform="rotate(-90 40 40)"/></svg>
+      <table class="mtab" style="flex:1"><tr><td>Filed since 4.2</td><td><b>107</b></td></tr>
+        <tr><td>Still open</td><td class="dl dn"><b>83</b></td></tr>
+        <tr><td>Resolved</td><td><b>24</b></td></tr></table></div>
+      <div class="ml">The ring shows the share still open (78%).</div></div>
   </div>
   <p class="src">Honest limits: the timeout and the weighting were never tested separately, and the shorter wait is the likelier culprit, not a proven one. The code-level gaps are my inference until Wen Li confirms. "Mostly seasonal" (Priya's hypothesis) isn't supported: callouts fell ~21%, but acceptance stepped down exactly at 4.2.</p>
 </section>
@@ -131,10 +197,15 @@
     <div class="prompt"><small>My prompt (01-origin-story/prompts.md, #2)</small>Create a prioritized list of next steps</div>
     <div class="finding"><small>Finding / artifact</small>
       <p><b>Five next steps, in order:</b></p>
-      <p>1. Separate the 60 s timeout from the weighting change<br>2. Talk to Helen about the Q3 slips<br>3. Triage the tickets with Nadia<br>4. Per-responder metrics (Ravi)<br>5. Write the "how routing priority works" doc with Wen Li</p>
+      <p>1. Separate the 60s timeout from the weighting change<br>2. Talk to Helen about the Q3 slips<br>3. Triage the tickets with Nadia<br>4. Per-responder metrics (Ravi)<br>5. Write the "how routing priority works" doc with Wen Li</p>
       <p>Grounded in the database: acceptance <b class="red">76.6% → 64.0%</b>, missed pings <b class="red">2.3% → 18.0%</b>. Not "mostly seasonal."</p>
       <div class="src">Fed the draft brief for Helen (prompt #3), <code>00-rook/brief-for-helen-4.2.md</code>. Its "starved because far from hotspots" line was later disproven (Module 2). Meteor Mite's area is the busiest.</div></div>
   </div>
+  <div class="card vis"><h3>Why the list starts with the timeout: database, before vs after 4.2</h3>
+    <div class="brow"><span>Pings taken</span><div class="btrack"><i style="width:76.6%;background:var(--blue)"></i><b>76.6%</b></div></div>
+    <div class="brow"><span></span><div class="btrack"><i style="width:64%;background:var(--red)"></i><b class="red">64.0% after</b></div></div>
+    <div class="brow"><span>Pings missed</span><div class="btrack"><i style="width:2.3%;min-width:4px;background:var(--blue)"></i><b>2.3%</b></div></div>
+    <div class="brow"><span></span><div class="btrack"><i style="width:18%;background:var(--red)"></i><b class="red">18.0% after</b></div></div></div>
 </section>
 
 <section id="m2">
@@ -142,8 +213,13 @@
   <div class="pf">
     <div class="prompt"><small>My prompt (02-super-hearing/prompts.md, #9)</small>Only look at what came in after 12 August. What's different about these compared to everything before?</div>
     <div class="finding"><small>Finding / artifact</small>
-      <p>Tickets jumped from <b>~6–8 a week</b> to <b class="red">20, 27, 32, 25</b>. 45 new-theme tickets, all open: <b>15</b> "ping moved on before they could answer", <b>30</b> "phone hasn't gone off in days".</p>
-      <p>Interviews alone would have pointed at dark mode, text size and alert sounds.</p>
+      <ul style="margin:.2em 0 .3em;padding-left:1.2em">
+        <li>Tickets jumped from <b>~6–8 a week</b> to <b class="red">20, 27, 32, 25</b></li>
+        <li>45 new-theme tickets, all open:
+          <ul style="padding-left:1.2em;margin:.2em 0">
+            <li><b>15</b> "ping moved on before they could answer"</li>
+            <li><b>30</b> "phone hasn't gone off in days"</li></ul></li>
+        <li>Interviews alone would have pointed at dark mode, text size and alert sounds</li></ul>
       <div class="src">Companion prompt #13: "If i'd only read the interviews, what would I have gotten wrong?"</div></div>
   </div>
   <div class="card" style="margin-top:20px"><svg id="tix" viewBox="0 0 900 190" width="100%" role="img" aria-label="Bar chart of weekly support tickets"></svg></div>
@@ -154,10 +230,17 @@
   <div class="pf">
     <div class="prompt"><small>My prompt (03-rewind/prompts.md, #1)</small>Show me the same weekly numbers excluding the four starved responders</div>
     <div class="finding"><small>Finding / artifact</small>
-      <p>Acceptance <b>76.8% → 64.7%</b> overall; <b>77.2% → 68.5%</b> without the four. They explain about a quarter of the drop. The other twelve were hit too (missed ~1% → 11–15%).</p>
-      <p>Farlight, week by week: pings <b class="red">12 → 10 → 3 → 1 → 0</b> while Uptown callouts held at 8 → 10. The work came back; the pings didn't.</p>
+      <ul style="margin:.2em 0 .3em;padding-left:1.2em">
+        <li>Acceptance <b>76.8% → 64.7%</b> overall; <b>77.2% → 68.5%</b> without the four</li>
+        <li>They explain about a quarter of the drop</li>
+        <li>The other twelve were hit too (missed ~1% → 11–15%)</li>
+        <li>Farlight, week by week: pings <b class="red">12 → 10 → 3 → 1 → 0</b> while Uptown callouts held at 8 → 10</li>
+        <li>The work came back; the pings didn't</li></ul>
       <div class="src">Companion prompt #9: "What's one sentence you can write about what happened to Farlight?"</div></div>
   </div>
+  <div class="card vis"><h3>Farlight: pings and takes per week vs callouts in its area (Uptown)</h3>
+    <svg viewBox="0 0 900 210" width="100%" role="img" aria-label="Farlight weekly pings and takes fall to zero while Uptown callouts hold steady"><g id="far"></g></svg>
+    <div class="legend"><span><i style="background:var(--red)"></i>Pings to Farlight</span><span><i style="background:var(--amber)"></i>Taken</span><span><i style="background:var(--blue)"></i>Uptown callouts</span></div></div>
 </section>
 
 <section id="m4">
@@ -166,9 +249,20 @@
     <div class="prompt"><small>My prompt (04-x-ray-vision/prompts.md, #1)</small>With what we know about the problems Farlight and others have seen/reported both predating and following the 4.2 release, inspect for gaps in the code and in chat describe what those gaps are, and what the impact of its absence is</div>
     <div class="finding"><small>Finding / artifact</small>
       <p>One set of weights applies to everyone, so it applied to decliners by structure; Marcus's unanswered 14 Aug question is answered by the code.</p>
-      <p>Gaps: a miss is scored like a refusal; no route back up except taking a callout; the list stops at the first yes; an unresolved 2019 score-decay TODO; no check the push reached the phone; scores kept in memory only; nobody alerted when no one takes a callout.</p>
+      <p style="margin-bottom:0">Gaps:</p>
+      <ul style="margin:.2em 0 .3em;padding-left:1.2em">
+        <li>A miss is scored like a refusal</li>
+        <li>No route back up except taking a callout</li>
+        <li>The list stops at the first yes</li>
+        <li>No check the push reached the phone</li>
+        <li>Scores kept in memory only</li>
+        <li>Nobody alerted when no one takes a callout</li></ul>
       <div class="src">Led to: message to Wen Li (#4) and reply to Marcus (#5). Drafted, not sent.</div></div>
   </div>
+  <div class="card vis"><h3>What 4.2 changed in the ranking weights, and in the wait</h3>
+    <div class="wt"><span>Before 4.2</span><div class="stack"><span style="width:45%;background:var(--blue)">Proximity 0.45</span><span style="width:40%;background:var(--green)">Recent acceptance 0.40</span><span style="width:15%;background:var(--violet)">Skills 0.15</span></div></div>
+    <div class="wt"><span>4.2</span><div class="stack"><span style="width:60%;background:var(--blue)">Proximity 0.60</span><span style="width:25%;background:var(--green)">Acceptance 0.25</span><span style="width:15%;background:var(--violet)">Skills 0.15</span></div></div>
+    <div class="wt"><span>Ping wait</span><div class="flow"><div class="node">90 s</div><div class="ar">→</div><div class="node bad">60s</div><div class="node">Take <b class="green">+0.08</b> · turned down or missed <b class="red">−0.12</b></div></div></div></div>
 </section>
 
 <section id="m5">
@@ -176,10 +270,21 @@
   <div class="pf">
     <div class="prompt"><small>My prompt (05-super-speed/prompts.md, #16)</small>I want the console to cleanly show my responders ranking at the top, and then the two responders as cards within which I can see their status (Active, Gone quiet, Recovering, and Away), if they've gone quiet, why, and a way to open a modal to manage their pings. The modal to manage their pings should give me a way to assign pings to them, and notify them, or set them to 'away' if they're unavailable for some reason.</div>
     <div class="finding"><small>Finding / artifact</small>
-      <p><b>A "way back in" for quiet responders:</b> log the ranking and derive a "gone quiet" state first (no routing change); then a smaller penalty for missed pings plus decay toward 0.5; then a re-entry ping for a quiet, fully capable responder near the top.</p>
-      <p>Shipped as separate stages, because 4.2 changed two things at once.</p>
+      <p style="margin-bottom:0"><b>A "way back in" for quiet responders:</b></p>
+      <ul style="margin:.2em 0 .3em;padding-left:1.2em">
+        <li>First, log the ranking and derive a "gone quiet" state (no routing change)</li>
+        <li>Then, a smaller penalty for missed pings plus decay toward 0.5</li>
+        <li>Then, a re-entry ping for a quiet, fully capable responder near the top</li>
+        <li>Shipped as separate stages, because 4.2 changed two things at once</li></ul>
       <div class="src">Artifacts: <code>brief.md</code>, <code>prd-way-back-in.md</code>, <code>spec-way-back-in-engineering.md</code>, <code>prototype.html</code>. Proposed values are my guesses.</div></div>
   </div>
+  <div class="card vis"><h3>The states a responder moves through in the prototype</h3>
+    <div class="states">
+      <div class="st" style="background:var(--okbg,#14291f);color:var(--green);border:1px solid var(--green)">Active<small>getting pings</small></div><span class="ar">→</span>
+      <div class="st" style="background:#3d2f0e;color:var(--amber);border:1px solid var(--amber)">Gone quiet<small>no pings in 3 days</small></div><span class="ar">→</span>
+      <div class="st" style="background:#15264a;color:var(--blue);border:1px solid var(--blue)">Recovering<small>re-entry ping offered</small></div><span class="ar">→</span>
+      <div class="st" style="background:#14291f;color:var(--green);border:1px solid var(--green)">Active<small>rank lifts on a take</small></div>
+      <div class="st" style="background:#2a3146;color:var(--mute);border:1px solid var(--line);margin-left:18px">Away<small>set by the handler</small></div></div></div>
 </section>
 
 <section id="m6">
@@ -191,6 +296,14 @@
       <p><b class="amber">Owner:</b> only a role ("Rook Dispatch PM"), no name.<br><b class="amber">Success measure:</b> targets are unquantified ("at least a few times a week").<br><b class="amber">Proposed fix:</b> one design, no options with trade-offs.</p>
       <div class="src">It passes on problem, who's affected and scope: the "what it deliberately doesn't do" list matches what the brief changes. Skill file: <code>.claude/skills/review-checklist/SKILL.md</code>.</div></div>
   </div>
+  <div class="card vis"><h3>My brief through the six checks (in checklist order)</h3>
+    <div class="tiles">
+      <div class="tile h"><b>Owner</b><span class="pill p-part">Partial</span></div>
+      <div class="tile p"><b>Problem</b><span class="pill p-pass">Pass</span></div>
+      <div class="tile p"><b>Who's affected</b><span class="pill p-pass">Pass</span></div>
+      <div class="tile h"><b>Success measure</b><span class="pill p-part">Partial</span></div>
+      <div class="tile p"><b>Scope</b><span class="pill p-pass">Pass</span></div>
+      <div class="tile h"><b>Proposed fix</b><span class="pill p-part">Partial</span></div></div></div>
 </section>
 
 <!-- Fix / prototype -->
@@ -255,7 +368,7 @@
     <div class="card" style="border-top:4px solid var(--green)"><b class="green">What we propose</b>
       <ul style="margin:.5em 0 0;padding-left:1.1em">
         <li>A <b>way back in</b>, in three stages: log and "gone quiet" state, softer miss penalty with decay, re-entry ping. <span class="src">(M5)</span></li>
-        <li>Test the 60 s wait and the weighting <b>separately</b>.</li>
+        <li>Test the 60s wait and the weighting <b>separately</b>.</li>
         <li>Gate every brief with <code>/review-checklist</code>. <span class="src">(M6)</span></li></ul></div>
   </div>
   <div class="card" style="margin-top:20px"><b>Do next</b>
@@ -288,6 +401,32 @@ const four=[36,37,36,37,40,37,18,3,0,0], rest=[96,94,97,95,92,97,78,101,108,120]
   const s=document.getElementById('tix'),data=[["Before 12 Aug (avg)",7],["10 Aug",20],["17 Aug",27],["24 Aug",32],["31 Aug",25]];
   let h='';data.forEach((d,i)=>{const y=14+i*34,w=d[1]*22;h+=`<text x="150" y="${y+16}" fill="#9aa6c4" font-size="13" text-anchor="end">${d[0]}</text><rect x="160" y="${y}" width="${w}" height="24" rx="5" fill="${i?'#ff6b6b':'#6ea8ff'}"/><text x="${166+w}" y="${y+17}" fill="#eef1f8" font-size="14" font-weight="700">${d[1]}${i==0?' (6–8)':''}</text>`});
   s.innerHTML=h;
+})();
+
+(function(){
+  const g=document.getElementById('far'),wk=["3 Aug","10 Aug","17 Aug","24 Aug","31 Aug"],
+  pings=[12,10,3,1,0],taken=[8,4,0,0,0],up=[8,6,7,10,10],L=40,W=860,x=i=>L+i*(W-L)/4*0.97,y=v=>180-v*13;
+  let h='';[0,4,8,12].forEach(v=>h+=`<line x1="${L}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#2c3858"/><text x="${L-8}" y="${y(v)+4}" fill="#9aa6c4" font-size="12" text-anchor="end">${v}</text>`);
+  wk.forEach((w,i)=>h+=`<text x="${x(i)}" y="204" fill="#9aa6c4" font-size="12" text-anchor="middle">${w}</text>`);
+  const ln=(d,c)=>{h+=`<polyline fill="none" stroke="${c}" stroke-width="3.5" stroke-linejoin="round" points="${d.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`+d.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${c}"/>`).join('')};
+  ln(up,'#6ea8ff');ln(taken,'#f5b942');ln(pings,'#ff6b6b');g.innerHTML=h;
+})();
+
+(function(){
+  const D={acc:{v:[76.7,77.1,76.4,75.0,77.6,77.9,54.2,65.8,66.7,72.7],u:'%',t:'Weekly acceptance %'},
+           miss:{v:[1.7,2.4,3.4,2.8,2.4,1.2,21.5,17.7,14.8,12.7],u:'%',t:'Weekly missed %'},
+           take:{v:[36,37,36,37,40,37,18,3,0,0],u:'',t:'Weekly takes, the four'}};
+  document.querySelectorAll('.spark').forEach(el=>{
+    const d=D[el.dataset.s],v=d.v,mx=Math.max(...v)*1.1,x=i=>8+i*(244/9),y=n=>60-n/mx*52;
+    const pts=a=>a.map(i=>x(i)+','+y(v[i])).join(' ');
+    const rel=x(6)-(x(6)-x(5))*0.45;
+    el.innerHTML=`<line x1="${rel}" x2="${rel}" y1="4" y2="62" stroke="#f5b942" stroke-dasharray="3 3" stroke-width="1.5"/>`+
+    `<polyline fill="none" stroke="#6ea8ff" stroke-width="2.5" stroke-linejoin="round" points="${pts([0,1,2,3,4,5,6])}"/>`+
+    `<polyline fill="none" stroke="#ff6b6b" stroke-width="2.5" stroke-linejoin="round" points="${pts([6,7,8,9])}"/>`+
+    `<circle cx="${x(5)}" cy="${y(v[5])}" r="3.5" fill="#6ea8ff"/><circle cx="${x(9)}" cy="${y(v[9])}" r="3.5" fill="#ff6b6b"/>`+
+    `<text x="8" y="69" font-size="9" fill="#9aa6c4">29 Jun</text><text x="252" y="69" font-size="9" fill="#9aa6c4" text-anchor="end">31 Aug</text>`+
+    `<title>${d.t}: ${v.join(', ')}</title>`;
+  });
 })();
 // ---- slide dots + keyboard ----
 const secs=[...document.querySelectorAll('section')],dots=document.getElementById('dots');
