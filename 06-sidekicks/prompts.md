@@ -21,3 +21,27 @@ Use the rook-wiki connector to open the Customer interviews database under the R
 
 ### 3.
 Use the rook-wiki connector to read every page under Product briefs. Save each one as a text file in 06-sidekicks/briefs/: bulk-callout.txt, handler-phone-app.txt, requisition-approval-chains.txt and routing-override-audit-log.txt. Copy the text exactly; don't summarise or reword anything. Tell me when the four files are saved.
+
+### 4.
+review-checklist on the requisition approval chains brief
+
+### 5.
+How do I use this skill int he future?
+
+### 6.
+/review-checklist/https://github.com/suzmagoon/claude-code-for-pms-final/blob/main/05-super-speed/brief.md
+
+### 7.
+/review-checklist/https://github.com/Klarson-622/claude-code-for-pms-final/blob/main/05-super-speed/brief.md
+
+### 8.
+Review the Klarson-622 version:
+
+### 9.
+Schedule review-checklist to run every Monday morning, and let me know what it finds. Nothing needs to be ready for it to fire today. I'm setting the habit, not waiting on the result.
+
+### 10.
+How would I point this skill at a different folder?
+
+### 11.
+disable this scheduled skill
