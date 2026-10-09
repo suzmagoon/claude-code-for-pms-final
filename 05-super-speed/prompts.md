@@ -65,3 +65,28 @@ Reopen my prototype
 ### 13.
 
 Handlers need to be able to manage and assign pings for responders. Send push notifications to the responders mobile devices when they're missing pings or when the handler assigns them a ping
+
+
+### 14.
+
+Can we adjust the presentation of my prototype so it appears more as a dashboard for all of my responders, with a section for who needs attention?
+
+### 15.
+
+restore the previous version
+
+### 16.
+
+I want the console to cleanly show my responders ranking at the top, and then the two responders as cards within which I can see their status (Active, Gone quiet, Recovering, and Away), if they've gone quiet, why, and a way to open a modal to manage their pings. The modal to manage their pings should give me a way to assign pings to them, and notify them, or set them to 'away' if they're unavailable for some reason.
+
+### 17.
+
+Can you move the prototype tabs out of the UI and put it in the prototype header? And wrap the UI in what looks like a browser container?
+
+### 18.
+
+Add a chess rook graphic to the "Rook Dispatch" logo
+
+### 19.
+
+Give Kip an avatar where it says "Signed in as Kip"
