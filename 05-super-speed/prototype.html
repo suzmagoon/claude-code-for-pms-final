@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rook Dispatch: gone-quiet prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg:#f4f5f7; --panel:#fff; --line:#dfe2e8; --ink:#1c2230; --mute:#677086; --brand:#27324a;
+          --warn:#b45309; --warnbg:#fef3c7; --ok:#166534; --okbg:#dcfce7; --bad:#991b1b; --badbg:#fee2e2; --blue:#1d4ed8; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.45 -apple-system,Segoe UI,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink); }
+  .proto { background:#fff7d6; border-bottom:1px solid #e8d98a; padding:8px 20px; font-size:13px; display:flex; justify-content:space-between; gap:16px; align-items:center; }
+  .proto b { color:#6b5600; }
+  header.app { background:var(--brand); color:#fff; padding:12px 20px; display:flex; align-items:center; gap:24px; }
+  header.app .logo { font-weight:700; letter-spacing:.3px; }
+  header.app nav a { color:#c9d1e6; margin-right:16px; font-size:14px; text-decoration:none; }
+  header.app nav a.on { color:#fff; border-bottom:2px solid #fff; padding-bottom:3px; }
+  header.app .who { margin-left:auto; font-size:13px; color:#c9d1e6; }
+  .tabs { padding:14px 20px 0; display:flex; gap:8px; }
+  .tabs button { border:1px solid var(--line); background:#fff; padding:7px 14px; border-radius:8px 8px 0 0; cursor:pointer; font-size:14px; color:var(--mute); }
+  .tabs button.on { color:var(--ink); font-weight:600; border-bottom-color:#fff; }
+  .badge { background:#dc2626; color:#fff; border-radius:999px; font-size:11px; padding:1px 7px; margin-left:6px; font-weight:600; }
+  main { padding:0 20px 40px; }
+  .view { display:none; background:var(--panel); border:1px solid var(--line); border-radius:0 10px 10px 10px; padding:20px; }
+  .view.on { display:block; }
+  h1 { font-size:20px; margin:0 0 2px; }
+  .sub { color:var(--mute); font-size:13px; margin-bottom:16px; }
+  .cols { display:block; }
+  #list { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:-1px; position:relative; z-index:1; }
+  #list .note { align-self:center; margin:0 0 0 auto; }
+  .row { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--line); border-radius:10px 10px 0 0; cursor:pointer; background:#f1f3f7; flex:1 1 280px; max-width:420px; }
+  .row:hover { background:#e8ebf1; }
+  .row.sel { background:#fff; border-color:var(--blue); border-bottom-color:#fff; box-shadow:none; border-top-width:3px; }
+  #detail { border:1px solid var(--blue); border-radius:0 10px 10px 10px; padding:16px; }
+  .dot { width:10px; height:10px; border-radius:50%; background:#22c55e; flex:none; }
+  .row .name { font-weight:600; }
+  .row .meta { font-size:12px; color:var(--mute); }
+  .tag { margin-left:auto; font-size:12px; padding:3px 8px; border-radius:999px; white-space:nowrap; }
+  .tag.active { background:var(--okbg); color:var(--ok); }
+  .tag.quiet { background:var(--warnbg); color:var(--warn); font-weight:600; }
+  .tag.recovering { background:#dbeafe; color:#1e40af; font-weight:600; }
+  .card { border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
+  .banner { border-radius:10px; padding:14px 16px; margin-bottom:14px; }
+  .banner.quiet { background:var(--warnbg); border:1px solid #f3d27a; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .banner.active { background:var(--okbg); border:1px solid #a7e3b9; }
+  .banner.recovering { background:#dbeafe; border:1px solid #a9c3f5; }
+  .banner h2 { margin:0 0 4px; font-size:16px; }
+  .banner p { margin:0; font-size:14px; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+  .stat { border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .stat .v { font-size:20px; font-weight:700; }
+  .stat .l { font-size:12px; color:var(--mute); }
+  .bar { height:10px; background:#e8ebf1; border-radius:6px; overflow:hidden; margin:6px 0 4px; position:relative; }
+  .bar i { display:block; height:100%; background:var(--blue); transition:width .4s; }
+  .bar u { position:absolute; left:50%; top:-2px; bottom:-2px; width:2px; background:#8a93a8; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; color:var(--mute); font-weight:500; padding:6px 8px; border-bottom:1px solid var(--line); }
+  td { padding:8px; border-bottom:1px solid #eef0f4; }
+  td.missed { color:var(--bad); } td.taken { color:var(--ok); font-weight:600; } td.turned { color:var(--warn); }
+  tr.new td { animation:flash 1.6s; }
+  @keyframes flash { from{background:#fff3b0;} to{background:transparent;} }
+  button.btn { background:var(--brand); color:#fff; border:0; padding:10px 16px; border-radius:8px; font-size:14px; cursor:pointer; }
+  button.btn:hover { background:#38466a; }
+  button.btn.ghost { background:#fff; color:var(--ink); border:1px solid var(--line); }
+  button.btn:disabled { background:#b9bfcc; cursor:not-allowed; }
+  .btn.msg { padding:8px 14px; font-size:14px; background:var(--warn); flex:none; white-space:nowrap; }
+  .btn.msg:hover { background:#92400e; }
+  .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .note { font-size:12px; color:var(--mute); margin-top:8px; }
+  .why { font-size:14px; margin:0 0 4px; padding-left:18px; }
+  .assign { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+  .assign select { padding:9px 10px; border:1px solid var(--line); border-radius:8px; font-size:14px; background:#fff; min-width:240px; }
+  .nlist { list-style:none; margin:8px 0 0; padding:0; font-size:13px; }
+  .nlist li { padding:7px 0; border-bottom:1px solid #eef0f4; display:flex; gap:10px; }
+  .nlist li:last-child { border-bottom:0; }
+  .nlist .w { color:var(--mute); flex:none; width:70px; }
+  .kind { font-size:11px; padding:1px 7px; border-radius:999px; background:#e0e7ff; color:#3730a3; white-space:nowrap; align-self:flex-start; }
+  .kind.missed { background:var(--badbg); color:var(--bad); }
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1c2230; color:#fff; padding:10px 16px; border-radius:8px; font-size:14px; opacity:0; transition:opacity .25s; pointer-events:none; max-width:90vw; z-index:10; }
+  .toast.on { opacity:1; }
+  /* phone */
+  .switch { display:flex; gap:8px; margin-bottom:14px; }
+  .switch button { border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer; font-size:13px; }
+  .switch button.on { background:var(--brand); color:#fff; border-color:var(--brand); }
+  .stage { display:flex; gap:30px; flex-wrap:wrap; align-items:flex-start; }
+  .phone { width:300px; height:560px; background:#10131c; border-radius:36px; padding:14px; flex:none; }
+  .screen { background:#fff; border-radius:24px; height:100%; overflow:hidden; display:flex; flex-direction:column; position:relative; }
+  .statusbar { background:#f1f3f7; padding:10px 16px; font-size:12px; color:var(--mute); display:flex; justify-content:space-between; }
+  .idle { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; color:var(--mute); }
+  .idle b { color:var(--ink); font-size:16px; }
+  .ping { flex:1; display:none; flex-direction:column; padding:20px; }
+  .ping.on { display:flex; }
+  .ping h3 { margin:0 0 4px; font-size:18px; }
+  .from { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; background:#e0e7ff; color:#3730a3; margin-bottom:6px; align-self:flex-start; }
+  .big { font-size:48px; font-weight:700; text-align:center; margin:14px 0 2px; }
+  .ping .bar { height:8px; }
+  .pbtn { border:0; border-radius:12px; padding:14px; font-size:16px; margin-top:10px; cursor:pointer; }
+  .pbtn.take { background:#16a34a; color:#fff; } .pbtn.no { background:#eef0f4; color:var(--ink); }
+  .push { position:absolute; left:10px; right:10px; top:-120px; background:rgba(28,34,48,.96); color:#fff; border-radius:16px; padding:10px 12px; font-size:12.5px; transition:top .35s; z-index:5; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+  .push.on { top:44px; }
+  .push b { display:block; font-size:12px; color:#9db0d9; margin-bottom:2px; }
+  .inbox { border-top:1px solid var(--line); max-height:150px; overflow:auto; background:#fafbfc; }
+  .inbox div { padding:8px 14px; font-size:12px; border-bottom:1px solid #eef0f4; }
+  .inbox small { color:var(--mute); display:block; }
+  .side { flex:1; min-width:260px; }
+  .legend li { margin-bottom:6px; font-size:14px; }
+</style>
+</head>
+<body>
+
+<div class="proto">
+  <span><b>Prototype, not the product.</b> Names and team are from the Rook scenario; every number on this screen is made up for illustration. Push notifications are simulated on the phone mock-up. Nothing is really sent or saved.</span>
+  <button class="btn ghost" onclick="resetAll()">Reset demo</button>
+</div>
+
+<header class="app">
+  <span class="logo">ROOK DISPATCH</span>
+  <nav><a>Callouts</a><a class="on">Responders</a><a>Reports</a><a>Settings</a></nav>
+  <span class="who">Signed in as Kip (handler)</span>
+</header>
+
+<div class="tabs">
+  <button id="tabConsole" class="on" onclick="showTab('console')">Handler console (web)</button>
+  <button id="tabPhone" onclick="showTab('phone')">Responder's phone<span id="unread"></span></button>
+</div>
+
+<main>
+<!-- ============ CONSOLE ============ -->
+<section id="viewConsole" class="view on">
+  <h1>My responders</h1>
+  <div class="sub">Click a responder to manage them. Try Meteor Mite.</div>
+  <div class="cols">
+    <div id="list"></div>
+    <div id="detail"></div>
+  </div>
+</section>
+
+<!-- ============ PHONE ============ -->
+<section id="viewPhone" class="view">
+  <h1 id="phoneTitle">Meteor Mite's phone</h1>
+  <div class="sub">What the responder sees. A re-entry ping looks like any other ping. Push notifications slide in at the top.</div>
+  <div class="switch" id="switch"></div>
+  <div class="stage">
+    <div class="phone"><div class="screen">
+      <div class="push" id="push" onclick="hidePush()"><b id="pushTitle"></b><span id="pushBody"></span></div>
+      <div class="statusbar"><span>Rook</span><span>9:41</span></div>
+      <div class="idle" id="idle">
+        <b>Nothing offered right now</b>
+        <p>You're marked available in Eastgate. Offers appear here.</p>
+        <p class="note">Go to the console, then send a re-entry ping or assign a ping to see one arrive.</p>
+      </div>
+      <div class="ping" id="ping">
+        <span class="from" id="from">New callout</span>
+        <h3 id="pcallout">Structural-entry support</h3>
+        <div class="note" id="pmeta">Eastgate</div>
+        <div class="big" id="count">60</div>
+        <div class="note" style="text-align:center">seconds to answer</div>
+        <div class="bar"><i id="countbar" style="width:100%"></i></div>
+        <button class="pbtn take" onclick="answer('taken')">Take it</button>
+        <button class="pbtn no" onclick="answer('turned')">Turn down</button>
+        <button class="pbtn no" style="font-size:13px;padding:8px" onclick="answer('missed')">(Demo: skip the wait, let it time out)</button>
+      </div>
+      <div class="inbox" id="inbox"></div>
+    </div></div>
+    <div class="side">
+      <div class="card">
+        <b>What this shows</b>
+        <ul class="legend">
+          <li><b>Push when assigned:</b> as soon as a handler assigns a ping, the responder's phone gets a push.</li>
+          <li><b>Push when a ping is missed:</b> when a ping times out, they get a push telling them what they missed.</li>
+          <li><b>Take it:</b> on a routed ping, rank starts to recover. On an assigned ping, ranking is not changed (open question, see notes).</li>
+        </ul>
+        <button class="btn ghost" onclick="showTab('console')">Back to Kip's console</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- illustrative starting state -------------------------------------------
+const CALLOUTS = [
+  {id:'c1', text:'Structural-entry support', area:'Eastgate', tags:'structural-entry'},
+  {id:'c2', text:'Crowd management',         area:'Eastgate', tags:'crowd-management'},
+  {id:'c3', text:'De-escalation',            area:'Eastgate', tags:'de-escalation'}
+];
+const START = () => ({
+  sel:'mm', phone:'mm', ping:null, unread:0,
+  rs:{
+    mm:{ id:'mm', name:'Meteor Mite', area:'Eastgate', score:0.12, daysQuiet:4, state:'quiet', notifs:[],
+         log:[ {when:'4 days ago', callout:'Eastgate', pos:'6th of 6', out:'missed'},
+               {when:'5 days ago', callout:'Eastgate', pos:'5th of 6', out:'missed'},
+               {when:'7 days ago', callout:'Eastgate', pos:'6th of 7', out:'turned'},
+               {when:'8 days ago', callout:'Eastgate', pos:'5th of 6', out:'missed'} ] },
+    gale:{ id:'gale', name:'The Gale', area:'Eastgate', score:0.78, daysQuiet:0, state:'active', notifs:[],
+         log:[ {when:'today', callout:'Eastgate', pos:'1st of 6', out:'taken'},
+               {when:'today', callout:'Eastgate', pos:'1st of 6', out:'taken'},
+               {when:'yesterday', callout:'Eastgate', pos:'2nd of 6', out:'taken'},
+               {when:'yesterday', callout:'Eastgate', pos:'1st of 7', out:'turned'} ] }
+  }
+});
+let S = START();
+const TAKE_CREDIT = 0.08, TURN_PENALTY = 0.12, MISS_PENALTY = 0.04;  // proposed values, from the spec
+const clamp = v => Math.max(0, Math.min(1, v));
+const $ = id => document.getElementById(id);
+const plural = n => n===1 ? '' : 's';
+
+function badge(r){
+  return r.state==='quiet' ? '<span class="tag quiet">Gone quiet</span>'
+       : r.state==='recovering' ? '<span class="tag recovering">Recovering</span>'
+       : '<span class="tag active">Active</span>';
+}
+function renderList(){
+  $('list').innerHTML = Object.values(S.rs).map(r => `
+    <div class="row ${S.sel===r.id?'sel':''}" onclick="select('${r.id}')">
+      <span class="dot" style="background:${r.state==='active'?'#22c55e':r.state==='quiet'?'#f59e0b':'#3b82f6'}"></span>
+      <div><div class="name">${r.name}</div><div class="meta">${r.area} · Available</div></div>
+      ${badge(r)}
+    </div>`).join('') + '<div class="note">Handler: Kip · 2 responders</div>';
+}
+function outLabel(o){ return o==='taken'?'Taken':o==='turned'?'Turned down':'Missed'; }
+function renderDetail(){
+  const r = S.rs[S.sel];
+  const busy = !!S.ping;
+  let banner = '';
+  if (r.state==='quiet') banner = `<div class="banner quiet"><div><h2>Gone quiet</h2>
+      <p>${r.name} hasn't had a routed ping in ${r.daysQuiet} days. Recent pings were mostly missed, so they're ranked low, and that is why the phone isn't going off.
+      Dispatch will offer a re-entry ping on the next suitable callout.</p></div>
+      <button class="btn msg" onclick="messageResponder('${r.id}')">Message ${r.name}</button></div>`;
+  else if (r.state==='recovering') banner = `<div class="banner recovering"><h2>Back in rotation, still ranked low</h2>
+      <p>${r.name} took a callout. Their rank is climbing back; each take lifts it further.</p></div>`;
+  else banner = `<div class="banner active"><h2>Active</h2><p>${r.name} is getting regular pings. Nothing to do.</p></div>`;
+
+  const why = r.state==='active' ? '' : `<div class="card"><b>Why they're ranked low</b>
+      <ul class="why"><li>Missed pings count against rank. (Proposed: a miss now costs less than a turn-down.)</li>
+      <li>Being ranked low means being asked later, or not at all.</li>
+      <li>Taking a callout is the way back up, so we'll offer one.</li></ul></div>`;
+
+  const assign = `<div class="card"><b>Assign a ping to ${r.name}</b>
+      <div class="note" style="margin-top:2px">Open callouts (illustrative). Assigning skips the ranking and sends a push to their phone right away.</div>
+      <div class="assign">
+        <select id="callSel">${CALLOUTS.map(c=>`<option value="${c.id}">${c.text} · ${c.area}</option>`).join('')}</select>
+        <button class="btn" ${busy?'disabled':''} onclick="assignPing('${r.id}')">Assign &amp; notify</button>
+      </div>
+      ${busy ? '<div class="note">A ping is already open on a phone. Answer it on the phone tab first.</div>' : ''}</div>`;
+
+  const sent = `<div class="card"><b>Push notifications sent to ${r.name}</b>
+      ${r.notifs.length ? `<ul class="nlist">${r.notifs.map(n=>`<li><span class="w">${n.when}</span><span class="kind ${n.kind==='missed'?'missed':''}">${n.kind==='missed'?'Missed ping':'Assigned'}</span><span>${n.body}</span></li>`).join('')}</ul>`
+         : '<div class="note">None yet. A push goes out when you assign a ping, and when they miss one.</div>'}</div>`;
+
+  const actions = r.state==='quiet'
+    ? `<div class="actions"><button class="btn" ${busy?'disabled':''} onclick="sendReentry()">Preview the re-entry ping on her phone</button></div>
+        <div class="note">In the real product the re-entry ping goes out automatically; this button just lets you see it.</div>` : '';
+
+  $('detail').innerHTML = `${banner}
+    <div class="stats">
+      <div class="stat"><div class="v">${r.daysQuiet}d</div><div class="l">since last routed ping</div></div>
+      <div class="stat"><div class="v">${r.log.filter(x=>x.out==='missed').length} of ${r.log.length}</div><div class="l">recent pings missed</div></div>
+      <div class="stat"><div class="v">${r.score.toFixed(2)}</div><div class="l">ranking score (illustrative)</div></div>
+    </div>
+    <div class="card"><b>Where they sit in the order</b>
+      <div class="bar"><i style="width:${r.score*100}%"></i><u></u></div>
+      <div class="note">Line = neutral (0.50), where new responders start.</div></div>
+    ${why}
+    ${assign}
+    ${sent}
+    <div class="card"><b>Recent pings</b>
+      <table><tr><th>When</th><th>Callout</th><th>Their place in the order</th><th>Outcome</th></tr>
+      ${r.log.map(x=>`<tr class="${x.isNew?'new':''}"><td>${x.when}</td><td>${x.callout}</td><td>${x.pos}</td><td class="${x.out==='turned'?'turned':x.out}">${outLabel(x.out)}${x.note?' <span class="note">'+x.note+'</span>':''}</td></tr>`).join('')}
+      </table></div>
+    ${actions}`;
+}
+function renderPhone(){
+  const r = S.rs[S.phone];
+  $('phoneTitle').textContent = r.name + "'s phone";
+  $('switch').innerHTML = Object.values(S.rs).map(x=>`<button class="${x.id===S.phone?'on':''}" onclick="phoneFor('${x.id}')">${x.name}</button>`).join('');
+  const mine = S.ping && S.ping.rid===S.phone;
+  $('ping').classList.toggle('on', !!mine);
+  $('idle').style.display = mine ? 'none' : 'flex';
+  if (mine){
+    $('from').textContent = S.ping.kind==='assigned' ? 'Assigned by your handler, Kip' : 'New callout';
+    $('pcallout').textContent = S.ping.callout.text;
+    $('pmeta').textContent = S.ping.callout.area + ' · full capability match';
+  }
+  $('inbox').innerHTML = r.notifs.length ? r.notifs.map(n=>`<div>${n.body}<small>${n.when}</small></div>`).join('') : '';
+  $('inbox').style.display = r.notifs.length ? 'block' : 'none';
+}
+function renderUnread(){ $('unread').innerHTML = S.unread ? `<span class="badge">${S.unread}</span>` : ''; }
+function renderAll(){ renderList(); renderDetail(); renderPhone(); renderUnread(); }
+
+function select(id){ S.sel = id; renderAll(); }
+function phoneFor(id){ S.phone = id; renderPhone(); }
+function showTab(t){
+  $('viewConsole').classList.toggle('on', t==='console'); $('viewPhone').classList.toggle('on', t==='phone');
+  $('tabConsole').classList.toggle('on', t==='console'); $('tabPhone').classList.toggle('on', t==='phone');
+  if (t==='phone'){ S.unread = 0; renderUnread(); }
+}
+function toast(msg){ const t=$('toast'); t.innerHTML=msg; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),3600); }
+function messageResponder(id){
+  const r = S.rs[id];
+  select(id);
+  toast(`Draft to ${r.name}: "Your phone hasn't gone off in ${r.daysQuiet} days. Are notifications on?" (Not sent: prototype)`);
+}
+
+// ---- push notifications (simulated) ---------------------------------------
+function pushTo(rid, kind, title, body){
+  const r = S.rs[rid];
+  r.notifs.unshift({when:'just now', kind, body});
+  if (S.phone!==rid) S.phone = rid;
+  $('pushTitle').textContent = 'ROOK · ' + title;
+  $('pushBody').textContent = body;
+  $('push').classList.add('on');
+  clearTimeout(pushTo.h); pushTo.h = setTimeout(hidePush, 5000);
+  if (!$('viewPhone').classList.contains('on')) S.unread++;
+}
+function hidePush(){ $('push').classList.remove('on'); }
+
+// ---- pings ------------------------------------------------------------------
+let timer=null, left=60;
+function startPing(rid, kind, callout){
+  S.ping = {rid, kind, callout}; left = 60;
+  $('count').textContent = left; $('countbar').style.width='100%';
+  clearInterval(timer);
+  timer = setInterval(()=>{ left--; $('count').textContent=left; $('countbar').style.width=(left/60*100)+'%'; if(left<=0) answer('missed'); },1000);
+}
+function sendReentry(){
+  const rid = S.sel;
+  startPing(rid, 'reentry', CALLOUTS[0]);
+  S.phone = rid; renderAll(); showTab('phone');
+}
+function assignPing(rid){
+  const c = CALLOUTS.find(x=>x.id===$('callSel').value);
+  const r = S.rs[rid];
+  startPing(rid, 'assigned', c);
+  pushTo(rid, 'assigned', 'New ping assigned', `Kip assigned you a callout: ${c.text}, ${c.area}. You have 60 seconds to answer.`);
+  renderAll();
+  toast(`Assigned to ${r.name}. Push sent to their phone. <u style="cursor:pointer" onclick="showTab('phone')">View phone</u>`);
+  $('toast').style.pointerEvents='auto';
+}
+function answer(out){
+  if(!S.ping) return;
+  clearInterval(timer);
+  const {rid, kind, callout} = S.ping; S.ping = null;
+  const r = S.rs[rid];
+  r.log.forEach(x=>x.isNew=false);
+  if (kind==='reentry'){
+    if (out==='taken'){ r.score = clamp(r.score+TAKE_CREDIT); r.state='recovering'; r.daysQuiet=0; }
+    else if (out==='turned'){ r.score = clamp(r.score-TURN_PENALTY); }
+    else { r.score = clamp(r.score-MISS_PENALTY); }
+  }
+  r.log.unshift({when:'just now', callout:callout.area, pos: kind==='assigned' ? 'Assigned by Kip' : '1st of 6 (re-entry)', out, isNew:true,
+                 note: kind==='assigned' ? '(no ranking change)' : out==='missed' ? '(small penalty)' : ''});
+  if (out==='missed'){
+    pushTo(rid, 'missed', 'You missed a ping', `You missed a ping: ${callout.text}, ${callout.area}. It moved to the next responder. Open the app to stay in rotation.`);
+  }
+  S.sel = rid; S.phone = rid;
+  renderAll();
+  if (out==='missed'){ toast(`Timed out. ${r.name} was sent a push about the missed ping. <u style="cursor:pointer" onclick="showTab('phone')">View phone</u>`); $('toast').style.pointerEvents='auto'; showTab('console'); }
+  else { showTab('console'); toast(out==='taken'
+        ? (kind==='assigned' ? `${r.name} took the assigned ping.` : `${r.name} took it. Her marker changed to "Back in rotation".`)
+        : `Turned down.${kind==='assigned'?'':' Normal turn-down penalty applied.'}`); }
+}
+function resetAll(){ clearInterval(timer); hidePush(); S=START(); showTab('console'); renderAll(); toast('Demo reset.'); }
+
+renderAll();
+</script>
+</body>
+</html>
